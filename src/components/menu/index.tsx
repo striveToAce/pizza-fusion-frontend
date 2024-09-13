@@ -25,11 +25,19 @@ const MenuDetails: React.FC = () => {
     ],
   };
 
-  // Handle increment/decrement of item quantity
-  const handleQuantityChange = (itemName: string, change: number) => {
+  /**
+   * Handles increment/decrement of item quantity in the cart.
+   *
+   * @param itemName The name of the item to update in the cart.
+   * @param change The amount to increase or decrease the quantity of the item by.
+   */
+  const handleQuantityChange = (itemName: string, change: number): void => {
     setCart((prevCart) => ({
       ...prevCart,
-      [itemName]: Math.max(0, (prevCart[itemName] || 0) + change), // Ensure no negative quantity
+      [itemName]: Math.max(
+        0,
+        (prevCart[itemName] || 0) + change // Ensure no negative quantity
+      ),
     }));
   };
 

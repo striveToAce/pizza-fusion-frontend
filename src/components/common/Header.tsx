@@ -1,4 +1,4 @@
-import Link from 'next/link';
+import Link from "next/link";
 
 interface HeaderProps {
   totalPrice: number;
@@ -31,7 +31,7 @@ const Header: React.FC<HeaderProps> = ({ totalPrice, isAdmin }) => {
               </div>
             </Link>
           </div>
-          
+
           {/* Conditional Admin Link */}
           {isAdmin && (
             <Link href="/admin">
@@ -44,9 +44,9 @@ const Header: React.FC<HeaderProps> = ({ totalPrice, isAdmin }) => {
 
         {/* Admin/Login Section */}
         <div>
-          <Link href="/login">
+          <Link href="/select-view">
             <div className="bg-gray-100 text-gray-800 px-4 py-2 rounded-full shadow-sm hover:bg-gray-200 transition-all">
-              Admin
+              Change view
             </div>
           </Link>
         </div>
