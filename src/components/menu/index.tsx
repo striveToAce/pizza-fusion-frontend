@@ -1,8 +1,9 @@
 "use client";
+
 import { useState } from "react";
 
 const MenuDetails: React.FC = () => {
-  const [selectedTab, setSelectedTab] = useState<string>("pizza"); // Initial tab selected
+    const [selectedTab, setSelectedTab] = useState<'pizza' | 'soda'>('pizza'); // Initial tab selected
   const [cart, setCart] = useState<{ [key: string]: number }>({
     Margherita: 0,
     Pepperoni: 0,
@@ -14,7 +15,14 @@ const MenuDetails: React.FC = () => {
     name: string;
     price: number;
   }
-  const menuItems = {
+  
+  // Define the type for the menuItems object
+  type MenuItems = {
+    pizza: IMenuItem[];
+    soda: IMenuItem[];
+  };
+  
+  const menuItems:MenuItems = {
     pizza: [
       { name: "Margherita", price: 12 },
       { name: "Pepperoni", price: 15 },
@@ -42,10 +50,12 @@ const MenuDetails: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 flex">
+    <div className="min-h-screen bg-gradient-to-r from-gray-100 to-blue-100 flex">
       {/* Left side: Advertising Text */}
       <div className="w-2/3 p-10">
-        <h1 className="text-4xl font-bold mb-6">Welcome to PizzaFusion!</h1>
+        <h1 className="text-5xl font-extrabold mb-6 text-gray-800">
+          Welcome to <span className="text-blue-500">PizzaFusion</span>!
+        </h1>
         <p className="text-lg text-gray-700 mb-6">
           At PizzaFusion, we believe in serving only the finest, freshest
           ingredients. Every pizza is crafted from scratch using the best
@@ -53,7 +63,7 @@ const MenuDetails: React.FC = () => {
           complement every bite.
         </p>
         <div className="mt-8 space-y-6">
-          <div className="bg-white p-6 shadow rounded-lg">
+          <div className="bg-white p-6 shadow-xl rounded-lg transition-all hover:shadow-2xl">
             <h2 className="text-2xl font-semibold mb-4 text-blue-500">
               🍕 Made Fresh to Order
             </h2>
@@ -64,7 +74,7 @@ const MenuDetails: React.FC = () => {
             </p>
           </div>
 
-          <div className="bg-white p-6 shadow rounded-lg">
+          <div className="bg-white p-6 shadow-xl rounded-lg transition-all hover:shadow-2xl">
             <h2 className="text-2xl font-semibold mb-4 text-blue-500">
               🥤 Refreshing Sodas
             </h2>
@@ -85,7 +95,7 @@ const MenuDetails: React.FC = () => {
             onClick={() => setSelectedTab("pizza")}
             className={`text-lg font-semibold py-2 px-4 rounded-lg ${
               selectedTab === "pizza"
-                ? "bg-blue-500 text-white"
+                ? "bg-blue-500 text-white transform transition-transform duration-300 hover:scale-105"
                 : "bg-gray-200 text-gray-700"
             }`}
           >
@@ -95,7 +105,7 @@ const MenuDetails: React.FC = () => {
             onClick={() => setSelectedTab("soda")}
             className={`text-lg font-semibold py-2 px-4 rounded-lg ${
               selectedTab === "soda"
-                ? "bg-blue-500 text-white"
+                ? "bg-blue-500 text-white transform transition-transform duration-300 hover:scale-105"
                 : "bg-gray-200 text-gray-700"
             }`}
           >
@@ -106,21 +116,26 @@ const MenuDetails: React.FC = () => {
         {/* Menu Items */}
         <div className="space-y-6">
           {menuItems[selectedTab].map((item: IMenuItem, index: number) => (
-            <div key={item.name} className="flex justify-between items-center">
+            <div
+              key={item.name}
+              className="flex justify-between items-center p-4 bg-gray-50 rounded-lg shadow hover:shadow-md transition-all"
+            >
               <div>
-                <h2 className="text-xl font-bold">{item.name}</h2>
-                <p className="text-gray-600">${item.price}</p>
+                <h2 className="text-xl font-bold text-gray-800">{item.name}</h2>
+                <p className="text-blue-500 font-semibold text-lg">
+                  ${item.price.toFixed(2)}
+                </p>
               </div>
-              <div className="flex items-center space-x-4">
+              <div className="flex items-center space-x-4 bg-white p-2 rounded-lg shadow">
                 <button
-                  className="bg-gray-300 px-3 py-1 rounded-lg"
+                  className="bg-gray-300 px-3 py-1 rounded-lg hover:bg-gray-400 transition-all"
                   onClick={() => handleQuantityChange(item.name, -1)}
                 >
                   −
                 </button>
                 <span className="text-lg font-semibold">{cart[item.name]}</span>
                 <button
-                  className="bg-blue-500 text-white px-3 py-1 rounded-lg"
+                  className="bg-blue-500 text-white px-3 py-1 rounded-lg hover:bg-blue-600 transition-all"
                   onClick={() => handleQuantityChange(item.name, 1)}
                 >
                   +
@@ -133,7 +148,7 @@ const MenuDetails: React.FC = () => {
         {/* Add to Cart Button */}
         <div className="mt-10">
           <button
-            className="w-full bg-green-500 text-white py-3 rounded-lg hover:bg-green-600 transition-all"
+            className="w-full bg-green-500 text-white py-3 rounded-lg hover:bg-green-600 transition-all transform hover:scale-105"
             onClick={() => alert("Items added to cart")}
           >
             Add to Cart
