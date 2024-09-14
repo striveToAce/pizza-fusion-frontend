@@ -2,6 +2,7 @@
 import { RootState } from "@/redux/store";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { useMemo } from "react";
 import { useSelector } from "react-redux";
 
 interface HeaderProps {
@@ -10,14 +11,26 @@ interface HeaderProps {
 }
 
 const Header: React.FC<HeaderProps> = ({ totalPrice, isAdmin }) => {
-  const router = useRouter()
+  const router = useRouter();
   const { currentView, carts } = useSelector((store: RootState) => store.view);
   const isCustomer = currentView === "customer";
+
+  const totalPriceTillnow = useMemo(() => {
+    let currentTotal = 0;
+    carts.map((c) => {
+      currentTotal += c.qnty * c.item.price;
+    });
+    return currentTotal;
+  }, [JSON.stringify(carts)]);
 
   // If no current view found, redirect to home page
   if (currentView === null) {
     router.push("/");
   }
+
+
+
+  
   return (
     <header className="bg-white shadow-md border-b border-gray-200 py-4">
       <div className="container mx-auto flex flex-col md:flex-row justify-between items-center px-4 md:px-6">
@@ -37,11 +50,11 @@ const Header: React.FC<HeaderProps> = ({ totalPrice, isAdmin }) => {
             <div className="flex items-center space-x-4">
               <div className="text-gray-700 font-semibold text-lg md:text-xl">
                 Total:{" "}
-                <span className="text-green-500">${totalPrice.toFixed(2)}</span>
+                <span className="text-green-500">${totalPriceTillnow.toFixed(2)}</span>
               </div>
-              <Link href="/checkout">
+              <Link href="/my-cart">
                 <div className="bg-blue-500 text-white px-6 py-3 rounded-full shadow-lg transform transition-all hover:scale-105 hover:bg-blue-600 cursor-pointer text-sm md:text-base">
-                  My Cart
+                  Checkout
                 </div>
               </Link>
             </div>
