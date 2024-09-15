@@ -1,6 +1,12 @@
 interface IOrderItem {
   menuItemId: string; // UUID string for menu item
   quantity: number; // Must be a positive integer
+  menuItem?:{
+    name:string;
+    size:string;
+    price:number;
+    description:string;
+  }
 }
 
 // TypeScript Interface for the overall order
@@ -20,4 +26,8 @@ type orderStatus = "PENDING" | "IN_PROGRESS" | "COMPLETED";
 interface TimeTrackerItem {
   id: string;
   remainingMinutes: number;
+}
+
+interface IOrderState {
+  clickedOrder: IOrder | null;
 }

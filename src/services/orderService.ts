@@ -19,3 +19,12 @@ export const getOrdersByStatus = async (query:orderStatus): Promise<IOrder[]> =>
     service: 'order',
   });
 };
+
+
+export const getOrderDetailById = async (id:string): Promise<IOrder> => {
+  return await apiCall({
+    url: `order-detail/${id}`, // Endpoint to fetch items by type
+    method: 'GET',
+    service: 'order',
+  });
+};

@@ -1,3 +1,5 @@
+"use client";
+import { useRouter } from "next/navigation";
 import { PageLoader } from "../common/loader/PageLoader";
 
 interface OrderStatsCardProps {
@@ -14,6 +16,7 @@ export const OrderStatsCard: React.FC<OrderStatsCardProps> = ({
   timeTracker,
   isLoading,
 }) => {
+  const router = useRouter();
   return (
     <div className="bg-white shadow-lg rounded-lg p-4 md:p-6 flex-1">
       <h2 className="text-xl md:text-2xl font-bold mb-4 text-yellow-500">
@@ -27,7 +30,11 @@ export const OrderStatsCard: React.FC<OrderStatsCardProps> = ({
               key={order.id}
               className="flex justify-between items-center bg-gray-50 p-3 md:p-4 rounded-lg shadow hover:shadow-md transition-all"
             >
-              <div>
+              <div
+                onClick={() => {
+                  router.push(`/my-cart/order-detail/${order.id}`);
+                }}
+              >
                 <h3 className="text-md md:text-lg font-semibold">
                   Order #{order.id}
                 </h3>
