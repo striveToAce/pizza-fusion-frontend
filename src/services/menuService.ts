@@ -10,11 +10,32 @@ export const getMenuItemsByType = async (type: 'pizza' | 'soda'): Promise<IMenuI
   });
 };
 
-// Fetch a single menu item by ID
-export const getMenuItemById = async (id: string): Promise<IMenuItem> => {
+
+export const addMenuItem = async (payload:IMenuItemPayload): Promise<IMenuItem> => {
   return await apiCall({
-    url: `item-details/${id}`, // API endpoint to fetch item by ID
-    method: 'GET',
+    url: ``, // API endpoint to fetch item by ID
+    method: 'POST',
+    data:payload,
     service: 'menu',
   });
 };
+
+
+// Fetch a single menu item by ID
+export const updateMenuItem = async (id: string,payload:IMenuItemPayload): Promise<IMenuItem> => {
+  return await apiCall({
+    url: `update-item/${id}`, // API endpoint to fetch item by ID
+    method: 'PUT',
+    data:payload,
+    service: 'menu',
+  });
+};
+
+export const deleteMenuItemById = async (id: string): Promise<IMenuItem> => {
+  return await apiCall({
+    url: `remove-item/${id}`, // API endpoint to fetch item by ID
+    method: 'DELETE',
+    service: 'menu',
+  });
+};
+

@@ -8,6 +8,15 @@
     size: 'SMALL' | 'MEDIUM' | 'LARGE';
     type: 'PIZZA' | 'SODA';
   }
+
+  interface IMenuItemPayload {
+    id?: string;
+    name: string;
+    description?: string;
+    price: number;
+    size: 'SMALL' | 'MEDIUM' | 'LARGE';
+    type: 'PIZZA' | 'SODA';
+  }
   
   type IMenuItems = {
     pizza: IMenuItem[];

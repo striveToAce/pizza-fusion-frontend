@@ -18,7 +18,7 @@ export const OrderStatsCard: React.FC<OrderStatsCardProps> = ({
 }) => {
   const router = useRouter();
   return (
-    <div className="bg-white shadow-lg rounded-lg p-4 md:p-6 flex-1">
+    <div className="bg-white shadow-lg rounded-lg p-4 md:p-6 flex-1 cursor-pointer">
       <h2 className="text-xl md:text-2xl font-bold mb-4 text-yellow-500">
         {title}
       </h2>

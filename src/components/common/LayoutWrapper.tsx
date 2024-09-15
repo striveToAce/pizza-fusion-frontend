@@ -2,6 +2,7 @@
 import React from "react";
 import Header from "./Header";
 import Footer from "./Footer";
+import { Toaster } from 'react-hot-toast';
 import { Provider } from "react-redux";
 import { store } from "@/redux/store";
 
@@ -24,7 +25,7 @@ const LayoutWrapper: React.FC<WrapperProps> = ({
 
         {/* Main Content */}
         <main className="container mx-auto p-6 flex-grow">{children}</main>
-
+        <Toaster />
         {/* Footer */}
         <Footer />
       </div>
