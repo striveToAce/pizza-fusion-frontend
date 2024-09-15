@@ -19,6 +19,7 @@ const viewsSlice = createSlice({
       state,
       action: PayloadAction<"customer" | "admin" | "chef" | null>
     ) => {
+      localStorage.setItem("pf-view", action.payload ?? "");
       state.currentView = action.payload;
     },
     // Add item to cart
@@ -72,7 +73,7 @@ export const {
   updateCartItemQuantity,
   clearCart,
   setLatestOrder,
-  clearLatestOrder
+  clearLatestOrder,
 } = viewsSlice.actions;
 
 // Export the reducer

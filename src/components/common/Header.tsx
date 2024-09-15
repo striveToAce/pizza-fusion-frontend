@@ -1,8 +1,10 @@
 "use client";
 import { RootState } from "@/redux/store";
+import { setCurrentView } from "@/redux/viewSlice";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useMemo } from "react";
+import { useEffect, useMemo } from "react";
+import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
 
 interface HeaderProps {
@@ -11,6 +13,7 @@ interface HeaderProps {
 }
 
 const Header: React.FC<HeaderProps> = ({ totalPrice, isAdmin }) => {
+  const dispatch = useDispatch();
   const router = useRouter();
   const { currentView, carts } = useSelector((store: RootState) => store.view);
   const isCustomer = currentView === "customer";
@@ -23,10 +26,16 @@ const Header: React.FC<HeaderProps> = ({ totalPrice, isAdmin }) => {
     return currentTotal;
   }, [JSON.stringify(carts)]);
 
-  // If no current view found, redirect to home page
-  if (currentView === null) {
-    router.push("/");
-  }
+  const addCurrentView = (value: currentViewType) => {
+    dispatch(setCurrentView(value));
+  };
+  useEffect(() => {
+    if (currentView === null) {
+      const key = localStorage.getItem("pf-view") as currentViewType;
+      if (key === "admin" || key === "customer") addCurrentView(key);
+      else addCurrentView("customer");
+    }
+  }, [currentView]);
 
   return (
     <header className="bg-white shadow-md border-b border-gray-200 py-4">

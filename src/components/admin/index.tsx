@@ -123,7 +123,7 @@ const AdminDashboard: React.FC = () => {
             noTitle={"No in-progress orders"}
             list={progressOrders}
             isLoading={loading == 1}
-            color="orange"
+            color="yellow"
           />
 
           {/* Completed Orders */}
