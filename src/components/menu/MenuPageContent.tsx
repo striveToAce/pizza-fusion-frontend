@@ -80,7 +80,7 @@ export const MenuPageContent: React.FC = () => {
           idQtyStore={idQtyStore}
           handleQuantityChange={handleQuantityChange}
           isLoading={isLoading}
-          items={menuItems.soda}
+          items={menuItems.pizza}
         />
 
         {/* Soda Section */}

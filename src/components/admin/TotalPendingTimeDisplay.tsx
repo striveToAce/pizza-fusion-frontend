@@ -22,15 +22,12 @@ export const TotalPendingTimeDisplay: React.FC<{
       ) : (
         <>
           <div className="text-gray-700 text-lg md:text-xl font-semibold text-center">
-            // Display the total number of pending orders
             Total Pending Orders:{" "}
             <span className="text-green-500 text-2xl md:text-3xl">
               {pendingOrders.length}
             </span>
           </div>
           <div className="text-gray-700 text-lg md:text-xl font-semibold text-center">
-            // Display the estimated total time required to complete
-            // all the pending orders
             Estimated Completion Time:{" "}
             <span className="text-blue-500">
               {pendingOrders.length > 0

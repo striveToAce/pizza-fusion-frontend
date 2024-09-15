@@ -58,11 +58,12 @@ export const MyCart: React.FC = () => {
         totalPrice,
         pizzaCount: pCount,
         sodaCount: sCount,
+        status:(pCount)?"PENDING":"COMPLETED",
         estimatedCompletionTime: pCount * 5 + estimatedTime ?? 0,
       });
       toast.dismiss();
       toast(
-        `cool! order done:) estimated time ${pCount * 5 + estimatedTime ?? 0}`
+        `cool! order done:) ${pCount * 5 + estimatedTime ?? 0?`estimated time: ${pCount * 5 + estimatedTime}mins`:""}`
       );
       dispatch(setLatestOrder(data));
       dispatch(clearCart());
