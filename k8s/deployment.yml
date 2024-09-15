@@ -17,6 +17,3 @@ spec:
         image: docker.io/docker380431/pizza-fusion-frontend:latest
         ports:
         - containerPort: 3000
-        envFrom:
-        - configMapRef:
-            name: pizza-fusion-config
