@@ -4,9 +4,10 @@
     qnty: number;
   }
   
+  type currentViewType = 'customer' | 'admin' | 'chef' | null;
   // Define the type for the state
   interface IViewsState {
-    currentView: 'customer' | 'admin' | 'chef' | null;
+    currentView: currentViewType;
     carts: ICartItem[];
     latestOrder:null | IOrder
   }

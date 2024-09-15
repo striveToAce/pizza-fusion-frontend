@@ -1,7 +1,8 @@
-'use client'
+"use client";
 import { setCurrentView } from "@/redux/viewSlice";
 import Link from "next/link";
 import { useDispatch } from "react-redux";
+import { IndividualViewCard } from "./IndividualViewCard";
 
 const SelectView: React.FC = () => {
   const dispatch = useDispatch();
@@ -15,34 +16,26 @@ const SelectView: React.FC = () => {
       {/* Options for Admin or User */}
       <div className="flex flex-col md:flex-row space-y-6 md:space-y-0 md:space-x-10">
         {/* User View */}
-        <Link
-          href="/user-view/menu"
-          onClick={() => {
-            dispatch(setCurrentView("customer"));
+        <IndividualViewCard
+          color="blue"
+          label="User View"
+          labelDesc="Browse the menu and place orders"
+          setCurrentView={(value) => {
+            dispatch(setCurrentView(value));
           }}
-        >
-          <div className="bg-blue-500 text-white px-10 py-6 md:px-16 md:py-10 rounded-2xl shadow-lg transform transition-all duration-300 hover:scale-105 hover:bg-blue-600 hover:shadow-xl cursor-pointer">
-            <h2 className="text-2xl md:text-3xl font-bold">User View</h2>
-            <p className="mt-4 text-md md:text-lg">
-              Browse the menu and place orders
-            </p>
-          </div>
-        </Link>
-
+          link={"/user-view/menu"}
+        />
         {/* Admin View */}
-        <Link
-          href="/select-view/admin"
-          onClick={() => {
-            dispatch(setCurrentView("admin"));
+
+        <IndividualViewCard
+          color="green"
+          label="Admin View"
+          labelDesc="Manage orders and track progress"
+          setCurrentView={(value) => {
+            dispatch(setCurrentView(value));
           }}
-        >
-          <div className="bg-green-500 text-white px-10 py-6 md:px-16 md:py-10 rounded-2xl shadow-lg transform transition-all duration-300 hover:scale-105 hover:bg-green-600 hover:shadow-xl cursor-pointer">
-            <h2 className="text-2xl md:text-3xl font-bold">Admin View</h2>
-            <p className="mt-4 text-md md:text-lg">
-              Manage orders and track progress
-            </p>
-          </div>
-        </Link>
+          link={"/select-view/admin"}
+        />
       </div>
     </div>
   );
