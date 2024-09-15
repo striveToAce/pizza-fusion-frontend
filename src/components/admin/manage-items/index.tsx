@@ -28,6 +28,7 @@ export const MenuManagement: React.FC = () => {
     try {
       await deleteMenuItemById(id);
       toast.success("Item deleted successfully");
+      getItems()
     } catch (err) {
       toast.error("something went wrong");
     } finally {

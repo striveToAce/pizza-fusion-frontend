@@ -122,6 +122,7 @@ export const MenuPageContent: React.FC = () => {
                   </div>
                 </div>
               ))}
+              {menuItems.pizza.length===0 && <div className="p-2 text-gray-600">no pizza found currently</div>}
             </div>
           )}
         </div>
@@ -167,6 +168,7 @@ export const MenuPageContent: React.FC = () => {
                   </div>
                 </div>
               ))}
+              {menuItems.soda.length===0 && <div className="p-2 text-gray-600">no soda found currently</div>}
             </div>
           )}
         </div>
