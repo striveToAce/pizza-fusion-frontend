@@ -5,11 +5,12 @@ import { createOrderService } from "@/services/orderService";
 import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
+import { Spinner } from "../common/loader/Spinner";
 
 export const MyCart: React.FC = () => {
   // Initial list of items already added to the cart
   const { carts } = useSelector((store: RootState) => store.view);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const dispatch = useDispatch();
 
   // Calculate the total price of the cart
