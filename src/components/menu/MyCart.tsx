@@ -26,7 +26,7 @@ export const MyCart: React.FC = () => {
     setIsLoading(true);
     const currentTime = new Date()
     const minutes = 50
-    const expectedTime = new Date(currentTime.getTime() + minutes * 60 * 1000);
+    const expectedTime = 0;
     const pizzaCount = carts.filter(
       (c: ICartItem) => c.item.type === "PIZZA"
     ).length;

@@ -6,14 +6,12 @@ interface OrderStatsCardProps {
   list: IOrder[];
   title: string;
   noTitle: string;
-  timeTracker: { [id: string]: string };
   isLoading: boolean;
 }
 export const OrderStatsCard: React.FC<OrderStatsCardProps> = ({
   title,
   noTitle,
   list,
-  timeTracker,
   isLoading,
 }) => {
   const router = useRouter();
@@ -39,7 +37,7 @@ export const OrderStatsCard: React.FC<OrderStatsCardProps> = ({
                   Order #{order.id}
                 </h3>
                 <p className="text-sm text-gray-600">
-                  Preparation Time: {timeTracker[order.id ?? ""]}
+                  Preparation Time: {order.estimatedCompletionTime}
                 </p>
               </div>
               <div className="w-full md:w-auto flex justify-center items-center px-3 py-2 md:px-4 md:py-2 bg-yellow-500 text-white rounded-full font-semibold text-sm md:text-base text-center">

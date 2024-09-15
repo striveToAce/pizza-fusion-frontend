@@ -18,15 +18,10 @@ interface IOrder {
   sodaCount: number;
   status?: orderStatus;
   type?: "PIZZA" | "SODA"; // Positive number for soda count
-  estimatedCompletionTime?: Date | null; // Optional field for estimated completion time
+  estimatedCompletionTime?: number; // Optional field for estimated completion time
 }
 
 type orderStatus = "PENDING" | "IN_PROGRESS" | "COMPLETED";
-
-interface TimeTrackerItem {
-  id: string;
-  remainingMinutes: number;
-}
 
 interface IOrderState {
   clickedOrder: IOrder | null;

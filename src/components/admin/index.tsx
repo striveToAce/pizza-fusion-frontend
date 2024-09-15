@@ -55,43 +55,6 @@ const AdminDashboard: React.FC = () => {
     callAllOrders();
   }, []);
 
-  const timeTracker = useMemo(() => {
-    // Helper function to calculate remaining time
-    const calculateRemainingTime = (order: IOrder): string => {
-      if (!order.estimatedCompletionTime) return "0 s";
-
-      const now = new Date();
-      const completionTime = new Date(order.estimatedCompletionTime);
-      const diffMs = completionTime.getTime() - now.getTime();
-
-      if (diffMs <= 0) return "0 s"; // Return 0 if the time has passed
-
-      const diffSeconds = Math.floor(diffMs / 1000); // Total seconds
-      const hours = Math.floor(diffSeconds / 3600); // 1 hour = 3600 seconds
-      const minutes = Math.floor((diffSeconds % 3600) / 60); // Remaining minutes
-      const seconds = diffSeconds % 60; // Remaining seconds
-
-      // Conditionally build the time string without 0 values
-      let timeString = "";
-      if (hours > 0) timeString += `${hours} hrs `;
-      if (minutes > 0) timeString += `${minutes} mins `;
-      if (seconds > 0 || timeString === "") timeString += `${seconds} s`;
-
-      return timeString.trim(); // Remove any trailing whitespace
-    };
-
-    // Combine all orders into a single array
-    const allOrders = [...doneOrders, ...pendingOrders, ...progressOrders];
-
-    const ordersWithRemainingTime = {} as { [key: string]: string };
-    // Map orders to an array of objects with id and remaining minutes
-    allOrders.map((order) => {
-      ordersWithRemainingTime[order.id ?? ""] = calculateRemainingTime(order);
-    });
-
-    return ordersWithRemainingTime;
-  }, [JSON.stringify({ doneOrders, pendingOrders, progressOrders })]);
-
   return (
     <div className="min-h-screen bg-gray-100 p-4 md:p-6">
       <div className="container mx-auto">
@@ -112,7 +75,6 @@ const AdminDashboard: React.FC = () => {
 
         {/* Dashboard Overview */}
         <TotalPendingTimeDisplay
-          timeTracker={timeTracker}
           pendingOrders={pendingOrders}
           isLoading={loading == 0}
         />
@@ -124,7 +86,6 @@ const AdminDashboard: React.FC = () => {
             title={"Pending Orders"}
             noTitle={"No pending orders"}
             list={pendingOrders}
-            timeTracker={timeTracker}
             isLoading={loading == 0}
           />
 
@@ -133,7 +94,6 @@ const AdminDashboard: React.FC = () => {
             title={"In Progress Orders"}
             noTitle={"No in-progress orders"}
             list={progressOrders}
-            timeTracker={timeTracker}
             isLoading={loading == 1}
           />
 
@@ -142,7 +102,6 @@ const AdminDashboard: React.FC = () => {
             title={"Completed Orders"}
             noTitle={"No completed orders"}
             list={doneOrders}
-            timeTracker={timeTracker}
             isLoading={loading == 2}
           />
         </div>
