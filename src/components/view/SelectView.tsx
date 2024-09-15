@@ -6,7 +6,7 @@ import { useDispatch } from "react-redux";
 const SelectView: React.FC = () => {
   const dispatch = useDispatch();
   return (
-    <div className="min-h-screen bg-gradient-to-r from-blue-100 to-green-100 flex flex-col items-center justify-center text-center p-4 md:p-10">
+    <div className=" bg-gradient-to-r from-blue-100 to-green-100 flex flex-col items-center justify-center text-center p-4 md:p-10">
       {/* Title */}
       <h1 className="text-4xl md:text-5xl font-extrabold text-gray-800 mb-8 md:mb-12">
         Choose Your <span className="text-blue-500">View</span>
