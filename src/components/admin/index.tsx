@@ -1,5 +1,8 @@
-'use client'
-import React, { useState, useEffect } from "react";
+"use client";
+import { getOrdersByStatus } from "@/services/orderService";
+import React, { useState, useEffect, useMemo } from "react";
+import { OrderStatsCard } from "./OrderStatsCard";
+import { TotalPendingTimeDisplay } from "./TotalPendingTimeDisplay";
 
 /**
  * AdminDashboard component
@@ -10,31 +13,82 @@ import React, { useState, useEffect } from "react";
  * @returns {JSX.Element} Admin Dashboard component
  */
 const AdminDashboard: React.FC = () => {
-  const [pendingOrders, setPendingOrders] = useState<number>(5); // Example initial pending orders
-  const [orders, setOrders] = useState<Array<any>>([
-    { id: 1, status: "In Progress", preparationTime: 15 },
-    { id: 2, status: "Pending", preparationTime: 20 },
-    { id: 3, status: "Pending", preparationTime: 10 },
-    { id: 4, status: "Done", preparationTime: 25 },
-  ]);
+  type loadingType = -1 | 0 | 1 | 2;
+  // Example initial pending orders
+  const [pendingOrders, setPendingOrders] = useState<Array<IOrder>>([]);
+  const [progressOrders, setProgressOrders] = useState<Array<IOrder>>([]);
+  const [doneOrders, setDoneOrders] = useState<Array<IOrder>>([]);
+  const [loading, setLoading] = useState<loadingType>(-1);
 
+  const statusKeyMapping = {
+    PENDING: "Pending",
+    IN_PROGRESS: "In Progress",
+    COMPLETED: "Done",
+  };
+  const loadingKeyMapping = {
+    PENDING: 0 as loadingType,
+    IN_PROGRESS: 1 as loadingType,
+    COMPLETED: 2 as loadingType,
+  };
+  const getAllOrders = async (type: orderStatus) => {
+    try {
+      setLoading(loadingKeyMapping[type]);
+      const data = await getOrdersByStatus(type);
+      if (type === "COMPLETED") setDoneOrders(data);
+      else if (type === "IN_PROGRESS") setProgressOrders(data);
+      else setPendingOrders(data);
+    } catch (err) {
+    } finally {
+      setLoading(-1);
+    }
+  };
+
+  const callAllOrders = async() => {
+    await getAllOrders("PENDING");
+    await getAllOrders("IN_PROGRESS");
+    await getAllOrders("COMPLETED");
+  };
   // Simulate order updates (For demo purposes)
   useEffect(() => {
-    const interval = setInterval(() => {
-      setOrders((prevOrders) =>
-        prevOrders.map((order) =>
-          order.status === "Pending"
-            ? { ...order, status: "In Progress" }
-            : order
-        )
-      );
-    }, 10000); // Every 10 seconds, change status for demo purposes
-
-    return () => clearInterval(interval);
+    callAllOrders();
   }, []);
 
-  const getFilteredOrders = (status: string) =>
-    orders.filter((order) => order.status === status);
+  const timeTracker = useMemo(() => {
+    // Helper function to calculate remaining time
+    const calculateRemainingTime = (order: IOrder): string => {
+      if (!order.estimatedCompletionTime) return "0 s";
+
+      const now = new Date();
+      const completionTime = new Date(order.estimatedCompletionTime);
+      const diffMs = completionTime.getTime() - now.getTime();
+
+      if (diffMs <= 0) return "0 s"; // Return 0 if the time has passed
+
+      const diffSeconds = Math.floor(diffMs / 1000); // Total seconds
+      const hours = Math.floor(diffSeconds / 3600); // 1 hour = 3600 seconds
+      const minutes = Math.floor((diffSeconds % 3600) / 60); // Remaining minutes
+      const seconds = diffSeconds % 60; // Remaining seconds
+
+      // Conditionally build the time string without 0 values
+      let timeString = "";
+      if (hours > 0) timeString += `${hours} hrs `;
+      if (minutes > 0) timeString += `${minutes} mins `;
+      if (seconds > 0 || timeString === "") timeString += `${seconds} s`;
+
+      return timeString.trim(); // Remove any trailing whitespace
+    };
+
+    // Combine all orders into a single array
+    const allOrders = [...doneOrders, ...pendingOrders, ...progressOrders];
+
+    const ordersWithRemainingTime = {} as { [key: string]: string };
+    // Map orders to an array of objects with id and remaining minutes
+    allOrders.map((order) => {
+      ordersWithRemainingTime[order.id ?? ""] = calculateRemainingTime(order);
+    });
+
+    return ordersWithRemainingTime;
+  }, [JSON.stringify({ doneOrders, pendingOrders, progressOrders })]);
 
   return (
     <div className="min-h-screen bg-gray-100 p-4 md:p-6">
@@ -44,117 +98,40 @@ const AdminDashboard: React.FC = () => {
         </h1>
 
         {/* Dashboard Overview */}
-        <div className="flex flex-col md:flex-row justify-between items-center bg-white shadow-lg rounded-lg p-6 mb-6 space-y-4 md:space-y-0">
-          <div className="text-gray-700 text-lg md:text-xl font-semibold text-center">
-            Total Pending Orders:{" "}
-            <span className="text-green-500 text-2xl md:text-3xl">
-              {getFilteredOrders("Pending").length}
-            </span>
-          </div>
-          <div className="text-gray-700 text-lg md:text-xl font-semibold text-center">
-            Estimated Completion Time:{" "}
-            <span className="text-blue-500">
-              {orders.length > 0
-                ? `${orders.reduce((total, order) => total + order.preparationTime, 0) / orders.length} minutes`
-                : "N/A"}
-            </span>
-          </div>
-        </div>
+        <TotalPendingTimeDisplay
+          timeTracker={timeTracker}
+          pendingOrders={pendingOrders}
+          isLoading={loading==0}
+        />
 
         {/* Orders by Status */}
         <div className="flex flex-col md:flex-row space-y-6 md:space-y-0 md:space-x-6">
           {/* Pending Orders */}
-          <div className="bg-white shadow-lg rounded-lg p-4 md:p-6 flex-1">
-            <h2 className="text-xl md:text-2xl font-bold mb-4 text-red-500">
-              Pending Orders
-            </h2>
-            <div className="space-y-4">
-              {getFilteredOrders("Pending").length > 0 ? (
-                getFilteredOrders("Pending").map((order) => (
-                  <div
-                    key={order.id}
-                    className="flex justify-between items-center bg-gray-50 p-3 md:p-4 rounded-lg shadow hover:shadow-md transition-all"
-                  >
-                    <div>
-                      <h3 className="text-md md:text-lg font-semibold">
-                        Order #{order.id}
-                      </h3>
-                      <p className="text-sm text-gray-600">
-                        Preparation Time: {order.preparationTime} minutes
-                      </p>
-                    </div>
-                    <div className="px-3 py-2 md:px-4 md:py-2 bg-red-500 text-white rounded-full font-semibold text-sm md:text-base text-center">
-                      {order.status}
-                    </div>
-                  </div>
-                ))
-              ) : (
-                <p className="text-gray-500">No pending orders</p>
-              )}
-            </div>
-          </div>
+          <OrderStatsCard
+            title={"Pending Orders"}
+            noTitle={"No pending orders"}
+            list={pendingOrders}
+            timeTracker={timeTracker}
+            isLoading={loading==0}
+          />
 
           {/* In Progress Orders */}
-          <div className="bg-white shadow-lg rounded-lg p-4 md:p-6 flex-1">
-            <h2 className="text-xl md:text-2xl font-bold mb-4 text-yellow-500">
-              In Progress Orders
-            </h2>
-            <div className="space-y-4">
-              {getFilteredOrders("In Progress").length > 0 ? (
-                getFilteredOrders("In Progress").map((order) => (
-                  <div
-                    key={order.id}
-                    className="flex justify-between items-center bg-gray-50 p-3 md:p-4 rounded-lg shadow hover:shadow-md transition-all"
-                  >
-                    <div>
-                      <h3 className="text-md md:text-lg font-semibold">
-                        Order #{order.id}
-                      </h3>
-                      <p className="text-sm text-gray-600">
-                        Preparation Time: {order.preparationTime} minutes
-                      </p>
-                    </div>
-                    <div className="w-full md:w-auto flex justify-center items-center px-3 py-2 md:px-4 md:py-2 bg-yellow-500 text-white rounded-full font-semibold text-sm md:text-base text-center">
-                      {order.status}
-                    </div>
-                  </div>
-                ))
-              ) : (
-                <p className="text-gray-500">No in-progress orders</p>
-              )}
-            </div>
-          </div>
+          <OrderStatsCard
+            title={"In Progress Orders"}
+            noTitle={"No in-progress orders"}
+            list={progressOrders}
+            timeTracker={timeTracker}
+            isLoading={loading==1}
+          />
 
           {/* Completed Orders */}
-          <div className="bg-white shadow-lg rounded-lg p-4 md:p-6 flex-1">
-            <h2 className="text-xl md:text-2xl font-bold mb-4 text-green-500">
-              Completed Orders
-            </h2>
-            <div className="space-y-4">
-              {getFilteredOrders("Done").length > 0 ? (
-                getFilteredOrders("Done").map((order) => (
-                  <div
-                    key={order.id}
-                    className="flex justify-between items-center bg-gray-50 p-3 md:p-4 rounded-lg shadow hover:shadow-md transition-all"
-                  >
-                    <div>
-                      <h3 className="text-md md:text-lg font-semibold">
-                        Order #{order.id}
-                      </h3>
-                      <p className="text-sm text-gray-600">
-                        Preparation Time: {order.preparationTime} minutes
-                      </p>
-                    </div>
-                    <div className="px-3 py-2 md:px-4 md:py-2 bg-green-500 text-white rounded-full font-semibold text-sm md:text-base text-center">
-                      {order.status}
-                    </div>
-                  </div>
-                ))
-              ) : (
-                <p className="text-gray-500">No completed orders</p>
-              )}
-            </div>
-          </div>
+          <OrderStatsCard
+            title={"Completed Orders"}
+            noTitle={"No completed orders"}
+            list={doneOrders}
+            timeTracker={timeTracker}
+            isLoading={loading==2}
+          />
         </div>
       </div>
     </div>

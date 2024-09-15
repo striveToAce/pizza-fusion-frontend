@@ -10,3 +10,12 @@ export const createOrderService = async (payload:IOrder): Promise<IOrder> => {
     service: 'order',
   });
 };
+
+
+export const getOrdersByStatus = async (query:orderStatus): Promise<IOrder[]> => {
+  return await apiCall({
+    url: `get-orders?status=${query}`, // Endpoint to fetch items by type
+    method: 'GET',
+    service: 'order',
+  });
+};

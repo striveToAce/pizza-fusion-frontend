@@ -1,17 +1,19 @@
 "use client";
 import { RootState } from "@/redux/store";
-import { clearLatestOrder, setLatestOrder } from "@/redux/viewSlice";
+import { clearCart, clearLatestOrder, setLatestOrder } from "@/redux/viewSlice";
 import { createOrderService } from "@/services/orderService";
 import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
 import { Spinner } from "../common/loader/Spinner";
+import { useRouter } from "next/navigation";
 
 export const MyCart: React.FC = () => {
   // Initial list of items already added to the cart
   const { carts } = useSelector((store: RootState) => store.view);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
   const dispatch = useDispatch();
+  const router = useRouter();
 
   // Calculate the total price of the cart
   const totalPrice = carts.reduce(
@@ -22,6 +24,9 @@ export const MyCart: React.FC = () => {
 
   const orderHandler = async () => {
     setIsLoading(true);
+    const currentTime = new Date()
+    const minutes = 50
+    const expectedTime = new Date(currentTime.getTime() + minutes * 60 * 1000);
     const pizzaCount = carts.filter(
       (c: ICartItem) => c.item.type === "PIZZA"
     ).length;
@@ -38,9 +43,12 @@ export const MyCart: React.FC = () => {
         totalPrice,
         pizzaCount,
         sodaCount,
+        estimatedCompletionTime:expectedTime
       });
       console.log(data);
       dispatch(setLatestOrder(data));
+      dispatch(clearCart());
+      router.push("/my-cart/order-success");
     } catch (err) {
     } finally {
       setIsLoading(false);
