@@ -2,7 +2,7 @@ import Link from "next/link";
 
 const Home: React.FC = () => {
   return (
-    <div className="min-h-screen bg-gradient-to-r from-gray-100 to-blue-100 flex flex-col items-center justify-center text-center p-4 md:p-10">
+    <div className="bg-gradient-to-r from-gray-100 to-blue-100 flex flex-col items-center justify-center text-center p-4 md:p-10 mt-20">
       {/* Welcome Text */}
       <h1 className="text-4xl md:text-5xl font-extrabold text-gray-800 mb-4">
         Welcome to <span className="text-blue-500">PizzaFusion</span>
