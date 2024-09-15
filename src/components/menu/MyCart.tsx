@@ -25,12 +25,14 @@ export const MyCart: React.FC = () => {
   const orderHandler = async () => {
     setIsLoading(true);
     const {estimatedTime} = await getEstimationTime()
-    const pizzaCount = carts.filter(
-      (c: ICartItem) => c.item.type === "PIZZA"
-    ).length;
-    const sodaCount = carts.filter(
-      (c: ICartItem) => c.item.type === "SODA"
-    ).length;
+    let pCount = 0;
+    let sCount = 0;
+    carts.map(
+      (c: ICartItem) => {
+        if(c.item.type === "PIZZA") pCount+=c.qnty
+          else sCount+=c.qnty
+      }
+    );
     const items = carts.map((c: ICartItem) => ({
       menuItemId: c.item.id,
       quantity: c.qnty,
@@ -39,11 +41,10 @@ export const MyCart: React.FC = () => {
       const data = await createOrderService({
         items,
         totalPrice,
-        pizzaCount,
-        sodaCount,
-        estimatedCompletionTime:pizzaCount*5+estimatedTime??0
+        pizzaCount:pCount,
+        sodaCount:sCount,
+        estimatedCompletionTime:pCount*5+estimatedTime??0
       });
-      console.log(data);
       dispatch(setLatestOrder(data));
       dispatch(clearCart());
       router.push("/my-cart/order-success");

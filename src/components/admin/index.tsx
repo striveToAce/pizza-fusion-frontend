@@ -1,9 +1,11 @@
 "use client";
 import { getOrdersByStatus } from "@/services/orderService";
 import React, { useState, useEffect, useMemo } from "react";
+import toast from "react-hot-toast";
 import { OrderStatsCard } from "./OrderStatsCard";
 import { TotalPendingTimeDisplay } from "./TotalPendingTimeDisplay";
 import { useRouter } from "next/navigation";
+import { createClient } from "@/lib/supabaseClient";
 
 /**
  * AdminDashboard component
@@ -14,6 +16,7 @@ import { useRouter } from "next/navigation";
  * @returns {JSX.Element} Admin Dashboard component
  */
 const AdminDashboard: React.FC = () => {
+  const supabase = createClient();
   const router = useRouter();
   type loadingType = -1 | 0 | 1 | 2;
   // Example initial pending orders
@@ -32,9 +35,9 @@ const AdminDashboard: React.FC = () => {
     IN_PROGRESS: 1 as loadingType,
     COMPLETED: 2 as loadingType,
   };
-  const getAllOrders = async (type: orderStatus) => {
+  const getAllOrders = async (type: orderStatus,isToLoad:boolean=true) => {
     try {
-      setLoading(loadingKeyMapping[type]);
+      if(isToLoad) setLoading(loadingKeyMapping[type]);
       const data = await getOrdersByStatus(type);
       if (type === "COMPLETED") setDoneOrders(data);
       else if (type === "IN_PROGRESS") setProgressOrders(data);
@@ -45,14 +48,38 @@ const AdminDashboard: React.FC = () => {
     }
   };
 
-  const callAllOrders = async () => {
-    await getAllOrders("PENDING");
-    await getAllOrders("IN_PROGRESS");
-    await getAllOrders("COMPLETED");
+  const callAllOrders = async (isToLoad:boolean=true) => {
+    await getAllOrders("PENDING",isToLoad);
+    await getAllOrders("IN_PROGRESS",isToLoad);
+    await getAllOrders("COMPLETED",isToLoad);
   };
+  const realtimeHandler = ()=>{
+    toast.success("found some updates:)")
+    callAllOrders(false)
+  }
   // Simulate order updates (For demo purposes)
   useEffect(() => {
     callAllOrders();
+  }, []);
+
+
+  useEffect(() => {
+    const changes = supabase
+      .channel("table-db-changes")
+      .on(
+        "postgres_changes",
+        {
+          event: "*",
+          schema: "public",
+          table: "Order",
+        },
+        (payload) => realtimeHandler()
+      )
+      .subscribe();
+
+    return () => {
+      changes.unsubscribe();
+    };
   }, []);
 
   return (
@@ -75,8 +102,8 @@ const AdminDashboard: React.FC = () => {
 
         {/* Dashboard Overview */}
         <TotalPendingTimeDisplay
-          pendingOrders={pendingOrders}
-          isLoading={loading == 0}
+          pendingOrders={[...pendingOrders, ...progressOrders]}
+          isLoading={loading == 0 || loading == 1}
         />
 
         {/* Orders by Status */}

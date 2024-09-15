@@ -28,7 +28,7 @@ export const MenuManagement: React.FC = () => {
     try {
       await deleteMenuItemById(id);
       toast.success("Item deleted successfully");
-      getItems()
+      getItems();
     } catch (err) {
       toast.error("something went wrong");
     } finally {
@@ -128,9 +128,9 @@ export const MenuManagement: React.FC = () => {
           isOpen={isModalOpen}
           onClose={() => setIsModalOpen(false)}
           currentItem={currentItem}
-          closeModal={()=>{
+          closeModal={() => {
             setIsModalOpen(false);
-            getItems()
+            getItems();
           }}
         />
       )}
