@@ -1,7 +1,7 @@
 "use client";
 import { RootState } from "@/redux/store";
 import { clearCart, clearLatestOrder, setLatestOrder } from "@/redux/viewSlice";
-import { createOrderService } from "@/services/orderService";
+import { createOrderService, getEstimationTime } from "@/services/orderService";
 import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
@@ -24,9 +24,7 @@ export const MyCart: React.FC = () => {
 
   const orderHandler = async () => {
     setIsLoading(true);
-    const currentTime = new Date()
-    const minutes = 50
-    const expectedTime = 0;
+    const {estimatedTime} = await getEstimationTime()
     const pizzaCount = carts.filter(
       (c: ICartItem) => c.item.type === "PIZZA"
     ).length;
@@ -43,7 +41,7 @@ export const MyCart: React.FC = () => {
         totalPrice,
         pizzaCount,
         sodaCount,
-        estimatedCompletionTime:expectedTime
+        estimatedCompletionTime:pizzaCount*5+estimatedTime??0
       });
       console.log(data);
       dispatch(setLatestOrder(data));

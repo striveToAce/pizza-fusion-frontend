@@ -28,3 +28,12 @@ export const getOrderDetailById = async (id:string): Promise<IOrder> => {
     service: 'order',
   });
 };
+
+
+export const getEstimationTime = async (): Promise<IEstimateTimeResponse> => {
+  return await apiCall({
+    url: `estimate-time`, // Endpoint to fetch items by type
+    method: 'GET',
+    service: 'chef',
+  });
+};

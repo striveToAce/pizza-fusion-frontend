@@ -21,6 +21,10 @@ interface IOrder {
   estimatedCompletionTime?: number; // Optional field for estimated completion time
 }
 
+interface IEstimateTimeResponse {
+  estimatedTime:number;
+}
+
 type orderStatus = "PENDING" | "IN_PROGRESS" | "COMPLETED";
 
 interface IOrderState {
