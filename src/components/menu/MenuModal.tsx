@@ -2,6 +2,7 @@
 import toast from "react-hot-toast";
 import { addMenuItem, updateMenuItem } from "@/services/menuService";
 import { useState } from "react";
+import { IMenuItem, IMenuItemPayload } from "@/types/menu";
 
 interface MenuModalProps {
   isOpen: boolean;

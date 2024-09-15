@@ -1,6 +1,7 @@
 "use client";
 import { useRouter } from "next/navigation";
 import { PageLoader } from "../common/loader/PageLoader";
+import { IOrder } from "@/types/order";
 
 interface OrderStatsCardProps {
   list: IOrder[];

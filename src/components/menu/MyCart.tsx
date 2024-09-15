@@ -8,6 +8,7 @@ import { clearCart, clearLatestOrder, setLatestOrder } from "@/redux/viewSlice";
 import { createOrderService, getEstimationTime } from "@/services/orderService";
 import { Spinner } from "../common/loader/Spinner";
 import { MyCartItemListing } from "../myCart/MyCartItemListing";
+import { ICartItem } from "@/types/view";
 
 /**
  * The MyCart component displays the user's current cart contents and allows them
@@ -59,11 +60,11 @@ export const MyCart: React.FC = () => {
         pizzaCount: pCount,
         sodaCount: sCount,
         status:(pCount)?"PENDING":"COMPLETED",
-        estimatedCompletionTime: pCount * 5 + estimatedTime ?? 0,
+        estimatedCompletionTime: pCount * 5 + estimatedTime,
       });
       toast.dismiss();
       toast(
-        `cool! order done:) ${pCount * 5 + estimatedTime ?? 0?`estimated time: ${pCount * 5 + estimatedTime}mins`:""}`
+        `cool! order done:) ${pCount * 5 + estimatedTime?`estimated time: ${pCount * 5 + estimatedTime}mins`:""}`
       );
       dispatch(setLatestOrder(data));
       dispatch(clearCart());

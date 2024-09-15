@@ -1,3 +1,4 @@
+import { currentViewType } from "@/types/view";
 import Link from "next/link";
 interface IndividualViewCardProps {
   setCurrentView: (value: currentViewType) => void;

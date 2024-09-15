@@ -1,4 +1,4 @@
-interface IOrderItem {
+export interface IOrderItem {
   menuItemId: string; // UUID string for menu item
   quantity: number; // Must be a positive integer
   menuItem?:{
@@ -10,7 +10,7 @@ interface IOrderItem {
 }
 
 // TypeScript Interface for the overall order
-interface IOrder {
+export interface IOrder {
   id?: string;
   items?: IOrderItem[]; // Array of items with at least one item
   totalPrice: number; // Positive number for total price
@@ -21,12 +21,12 @@ interface IOrder {
   estimatedCompletionTime?: number; // Optional field for estimated completion time
 }
 
-interface IEstimateTimeResponse {
+export interface IEstimateTimeResponse {
   estimatedTime:number;
 }
 
-type orderStatus = "PENDING" | "IN_PROGRESS" | "COMPLETED";
+export type orderStatus = "PENDING" | "IN_PROGRESS" | "COMPLETED";
 
-interface IOrderState {
+export interface IOrderState {
   clickedOrder: IOrder | null;
 }

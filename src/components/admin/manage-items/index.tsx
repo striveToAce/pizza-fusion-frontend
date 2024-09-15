@@ -4,6 +4,7 @@ import { deleteMenuItemById, getMenuItemsByType } from "@/services/menuService";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { ManageItemList } from "./ManageItemList";
+import { IMenuItem } from "@/types/menu";
 
 export const MenuManagement: React.FC = () => {
   const [isPizzaLoading, setIsPizzaLoading] = useState<boolean>(false);
@@ -36,7 +37,7 @@ export const MenuManagement: React.FC = () => {
    * @param {"pizza" | "soda"} type - The type of item to delete (pizza or soda)
    * @returns {Promise<void>}
    */
-  const handleDelete = async (id: string, type: "pizza" | "soda"): Promise<void> => {
+  const handleDelete = async (id: string): Promise<void> => {
     try {
       // Delete the item
       await deleteMenuItemById(id);

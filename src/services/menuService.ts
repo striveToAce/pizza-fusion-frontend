@@ -1,4 +1,5 @@
 // services/menuService.ts
+import { IMenuItem, IMenuItemPayload } from '@/types/menu';
 import apiCall from '../lib/axios'; // Import the common API call utility
 
 // Fetch menu items by type (PIZZA or SODA)

@@ -1,3 +1,5 @@
+import { IOrder } from "@/types/order";
+import { ICartItem, IViewsState } from "@/types/view";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 // Define the type for a MenuItem

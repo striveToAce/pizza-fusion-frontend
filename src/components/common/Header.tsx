@@ -2,21 +2,20 @@
 import { RootState } from "@/redux/store";
 import { setCurrentView } from "@/redux/viewSlice";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import { useEffect, useMemo } from "react";
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
 import { HeaderCustomerPart } from "./header/HeaderCustomPart";
 import { HeaderLogo } from "./header/HeaderLogo";
+import { currentViewType } from "@/types/view";
 
 interface HeaderProps {
   totalPrice: number;
   isAdmin: boolean;
 }
 
-const Header: React.FC<HeaderProps> = ({ totalPrice, isAdmin }) => {
+const Header: React.FC<HeaderProps> = () => {
   const dispatch = useDispatch();
-  const router = useRouter();
   const { currentView, carts } = useSelector((store: RootState) => store.view);
   const isCustomer = currentView === "customer";
 

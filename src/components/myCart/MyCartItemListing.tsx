@@ -1,3 +1,5 @@
+import { ICartItem } from "@/types/view";
+
 interface MyCartItemListingProps {
   carts: ICartItem[];
 }
@@ -13,7 +15,7 @@ export const MyCartItemListing: React.FC<MyCartItemListingProps> = ({
 }) => {
   return (
     <div className="space-y-4">
-      {carts.map((cartItem, index) => (
+      {carts.map((cartItem) => (
         <div
           key={cartItem.item.id}
           className="flex justify-between items-center p-4 bg-gray-50 rounded-lg shadow hover:shadow-md transition-all"

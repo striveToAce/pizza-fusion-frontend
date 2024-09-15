@@ -1,3 +1,4 @@
+import { IMenuItem } from "@/types/menu";
 import React from "react";
 
 /**
@@ -6,13 +7,13 @@ import React from "react";
  * It also provides buttons to edit and delete each item.
  * @param {IMenuItem[]} list - The list of items to display.
  * @param {(item:IMenuItem) => void} handleEdit - A function to call when an item is clicked.
- * @param {(id:string,type:'pizza' | 'soda') => void} handleDelete - A function to call when an item is to be deleted.
+ * @param {(id:string) => void} handleDelete - A function to call when an item is to be deleted.
  * @returns {JSX.Element} - The list of items.
  */
 export const ManageItemList: React.FC<{
   list: IMenuItem[];
   handleEdit: (item:IMenuItem) => void;
-  handleDelete: (id:string,type:'pizza' | 'soda') => void;
+  handleDelete: (id:string) => void;
 }> = ({ list, handleDelete, handleEdit }) => {
   return (
     <div className="space-y-4">
@@ -40,7 +41,7 @@ export const ManageItemList: React.FC<{
             {/* Delete button */}
             <button
               className="bg-red-500 text-white py-2 px-4 rounded-lg hover:bg-red-600"
-              onClick={() => handleDelete(item.id, "soda")}
+              onClick={() => handleDelete(item.id)}
             >
               Delete
             </button>

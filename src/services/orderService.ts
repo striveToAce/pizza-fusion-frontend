@@ -1,4 +1,5 @@
 // services/menuService.ts
+import { IEstimateTimeResponse, IOrder, orderStatus } from '@/types/order';
 import apiCall from '../lib/axios'; // Import the common API call utility
 
 // Fetch menu items by type (PIZZA or SODA)

@@ -1,3 +1,4 @@
+import { IMenuItem } from "@/types/menu";
 import React from "react";
 
 interface MenuListingBoxProps {
@@ -34,7 +35,7 @@ export const MenuListingBox: React.FC<MenuListingBoxProps> = ({
         </div>
       ) : (
         <div className="space-y-6 overflow-y-auto max-h-[400px] p-2 rounded-lg">
-          {items.map((item: IMenuItem, index: number) => (
+          {items.map((item: IMenuItem) => (
             <div
               key={item.id}
               className="flex justify-between items-center p-4 bg-gray-50 rounded-lg shadow hover:shadow-md transition-all"

@@ -4,7 +4,7 @@ import axios, { AxiosRequestConfig, Method } from "axios";
 interface ApiRequestProps {
   url: string;
   method?: Method;
-  data?: any;
+  data?: unknown;
   headers?: Record<string, string>;
   service?: "menu" | "order" | "chef"; // Choose which microservice to call
 }
@@ -39,11 +39,24 @@ const apiCall = async ({
   try {
     const response = await axios(config);
     return response.data;
-  } catch (error: any) {
-    console.error("API Call Error:", error.message);
-    throw new Error(
-      error.response?.data?.message || "Error with the API request"
-    );
+  } catch (error : unknown) {
+    if (axios.isAxiosError(error)) {
+      console.error("API Call Error:", error.message);
+  
+      // Check if there's a response from the API with a message
+      const errorMessage = error.response?.data?.message || "Error with the API request";
+      throw new Error(errorMessage);
+  
+    } else if (error instanceof Error) {
+      // Handle general JavaScript errors
+      console.error("General Error:", error.message);
+      throw new Error(error.message);
+      
+    } else {
+      // Handle unknown errors
+      console.error("Unknown Error:", error);
+      throw new Error("An unknown error occurred");
+    }
   }
 };
 

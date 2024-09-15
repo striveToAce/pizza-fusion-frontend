@@ -1,11 +1,12 @@
 "use client";
 import { getOrdersByStatus } from "@/services/orderService";
-import React, { useState, useEffect, useMemo } from "react";
+import React, { useState, useEffect } from "react";
 import toast from "react-hot-toast";
 import { OrderStatsCard } from "./OrderStatsCard";
 import { TotalPendingTimeDisplay } from "./TotalPendingTimeDisplay";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabaseClient";
+import { IOrder, orderStatus } from "@/types/order";
 
 /**
  * AdminDashboard component
@@ -25,11 +26,6 @@ const AdminDashboard: React.FC = () => {
   const [doneOrders, setDoneOrders] = useState<Array<IOrder>>([]);
   const [loading, setLoading] = useState<loadingType>(-1);
 
-  const statusKeyMapping = {
-    PENDING: "Pending",
-    IN_PROGRESS: "In Progress",
-    COMPLETED: "Done",
-  };
   const loadingKeyMapping = {
     PENDING: 0 as loadingType,
     IN_PROGRESS: 1 as loadingType,
@@ -112,7 +108,7 @@ const AdminDashboard: React.FC = () => {
           schema: "public",
           table: "Order",
         },
-        (payload) => realtimeHandler()
+        () => realtimeHandler()
       )
       .subscribe();
 

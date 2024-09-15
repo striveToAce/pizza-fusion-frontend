@@ -6,6 +6,7 @@ import React, { useEffect, useMemo, useState } from "react";
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
 import { MenuListingBox } from "./MenuListingBox";
+import { IMenuItem, IMenuItems } from "@/types/menu";
 
 export const MenuPageContent: React.FC = () => {
   const dispatch = useDispatch();
@@ -67,8 +68,8 @@ export const MenuPageContent: React.FC = () => {
       {/* Display Text for User Interaction */}
       <div className="text-center text-gray-600 mb-6">
         <p className="text-md md:text-lg">
-          Select your favorite items from the Pizza and Soda menu below and
-          adjust the quantity. Add your choices to the cart when you're ready!
+          {`Select your favorite items from the Pizza and Soda menu below and
+          adjust the quantity. Add your choices to the cart when you're ready!`}
         </p>
       </div>
 

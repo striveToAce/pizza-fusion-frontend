@@ -1,3 +1,4 @@
+import { IOrder } from "@/types/order";
 import { Spinner } from "../common/loader/Spinner";
 
 /**

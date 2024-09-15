@@ -1,6 +1,6 @@
 
   // Define the type for the menuItems object
-  interface IMenuItem {
+  export interface IMenuItem {
     id: string;
     name: string;
     description?: string;
@@ -9,7 +9,7 @@
     type: 'PIZZA' | 'SODA';
   }
 
-  interface IMenuItemPayload {
+  export interface IMenuItemPayload {
     id?: string;
     name: string;
     description?: string;
@@ -18,7 +18,7 @@
     type: 'PIZZA' | 'SODA';
   }
   
-  type IMenuItems = {
+  export type IMenuItems = {
     pizza: IMenuItem[];
     soda: IMenuItem[];
   };

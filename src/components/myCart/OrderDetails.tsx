@@ -2,6 +2,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { PageLoader } from "../common/loader/PageLoader";
 import { getOrderDetailById } from "@/services/orderService";
+import { IOrder } from "@/types/order";
 
 export const OrderDetails: React.FC<{ id: string }> = ({ id }) => {
   const [order, setOrder] = useState<IOrder | null>(null);
@@ -32,7 +33,7 @@ export const OrderDetails: React.FC<{ id: string }> = ({ id }) => {
         <>
           {/* List of Cart Items */}
           <div className="space-y-4">
-            {(order?.items ?? []).map((cartItem, index) => (
+            {(order?.items ?? []).map((cartItem) => (
               <div
                 key={cartItem.menuItemId}
                 className="flex justify-between items-center p-4 bg-gray-50 rounded-lg shadow hover:shadow-md transition-all"

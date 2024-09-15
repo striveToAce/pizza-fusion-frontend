@@ -1,6 +1,5 @@
 "use client";
 import { setCurrentView } from "@/redux/viewSlice";
-import Link from "next/link";
 import { useDispatch } from "react-redux";
 import { IndividualViewCard } from "./IndividualViewCard";
 
@@ -12,7 +11,7 @@ import { IndividualViewCard } from "./IndividualViewCard";
 const SelectView: React.FC = () => {
   const dispatch = useDispatch();
   return (
-    <div className=" bg-gradient-to-r from-blue-100 to-green-100 flex flex-col items-center justify-center text-center p-4 md:p-10">
+    <div className="bg-gradient-to-r from-blue-100 to-green-100 flex flex-col items-center justify-center text-center p-4 md:p-10">
       {/* Title */}
       <h1 className="text-4xl md:text-5xl font-extrabold text-gray-800 mb-8 md:mb-12">
         Choose Your <span className="text-blue-500">View</span>
@@ -43,7 +42,7 @@ const SelectView: React.FC = () => {
         {/* Admin View */}
 
         <IndividualViewCard
-          color="green"
+          color="red"
           label="Admin View"
           /**
            * The label description for the admin view card.
