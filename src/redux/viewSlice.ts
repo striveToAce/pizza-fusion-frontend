@@ -6,6 +6,7 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 const initialState: IViewsState = {
   currentView: null,
   carts: [],
+  latestOrder: null,
 };
 
 // Create the views slice
@@ -54,6 +55,12 @@ const viewsSlice = createSlice({
     clearCart: (state) => {
       state.carts = [];
     },
+    setLatestOrder: (state, action: PayloadAction<IOrder>) => {
+      state.latestOrder = action.payload;
+    },
+    clearLatestOrder: (state) => {
+      state.latestOrder = null;
+    },
   },
 });
 
@@ -64,6 +71,8 @@ export const {
   removeItemFromCart,
   updateCartItemQuantity,
   clearCart,
+  setLatestOrder,
+  clearLatestOrder
 } = viewsSlice.actions;
 
 // Export the reducer

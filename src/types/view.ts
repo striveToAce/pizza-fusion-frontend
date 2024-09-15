@@ -17,5 +17,6 @@ interface IMenuItem {
   interface IViewsState {
     currentView: 'customer' | 'admin' | 'chef' | null;
     carts: ICartItem[];
+    latestOrder:null | IOrder
   }
   

@@ -1,14 +1,54 @@
 "use client";
 import { RootState } from "@/redux/store";
-import React, { useState } from "react";
+import { clearLatestOrder, setLatestOrder } from "@/redux/viewSlice";
+import { createOrderService } from "@/services/orderService";
+import React, { useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
 
 export const MyCart: React.FC = () => {
   // Initial list of items already added to the cart
   const { carts } = useSelector((store: RootState) => store.view);
+  const [isLoading, setIsLoading] = useState(false);
+  const dispatch = useDispatch();
 
   // Calculate the total price of the cart
-  const totalPrice = carts.reduce((acc:number, cartItem:ICartItem) => acc + cartItem.item.price * cartItem.qnty, 0);
+  const totalPrice = carts.reduce(
+    (acc: number, cartItem: ICartItem) =>
+      acc + cartItem.item.price * cartItem.qnty,
+    0
+  );
+
+  const orderHandler = async () => {
+    setIsLoading(true);
+    const pizzaCount = carts.filter(
+      (c: ICartItem) => c.item.type === "PIZZA"
+    ).length;
+    const sodaCount = carts.filter(
+      (c: ICartItem) => c.item.type === "SODA"
+    ).length;
+    const items = carts.map((c: ICartItem) => ({
+      menuItemId: c.item.id,
+      quantity: c.qnty,
+    }));
+    try {
+      const data = await createOrderService({
+        items,
+        totalPrice,
+        pizzaCount,
+        sodaCount,
+      });
+      console.log(data);
+      dispatch(setLatestOrder(data));
+    } catch (err) {
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    dispatch(clearLatestOrder());
+  }, []);
 
   return (
     <div className="w-full bg-white p-6 shadow-lg">
@@ -32,7 +72,9 @@ export const MyCart: React.FC = () => {
                   <p className="text-blue-500 font-semibold text-md md:text-lg">
                     ${cartItem.item.price.toFixed(2)}
                   </p>
-                  <p className="text-gray-600 text-sm">{cartItem.item.description}</p>
+                  <p className="text-gray-600 text-sm">
+                    {cartItem.item.description}
+                  </p>
                 </div>
                 <div className="flex items-center space-x-2 md:space-x-4 bg-white p-2 rounded-lg shadow">
                   <span className="text-md md:text-lg font-semibold">
@@ -51,9 +93,16 @@ export const MyCart: React.FC = () => {
 
           {/* Order Now Button */}
           <div className="mt-8 flex justify-end">
-            <button className="relative px-6 py-3 bg-gradient-to-r from-green-400 to-green-600 text-white font-semibold rounded-full shadow-lg hover:from-green-500 hover:to-green-700 hover:shadow-xl transition duration-300 ease-in-out transform hover:scale-105 focus:outline-none">
-              Order Now
-            </button>
+            {isLoading ? (
+              <Spinner />
+            ) : (
+              <button
+                className="relative px-6 py-3 bg-gradient-to-r from-green-400 to-green-600 text-white font-semibold rounded-full shadow-lg hover:from-green-500 hover:to-green-700 hover:shadow-xl transition duration-300 ease-in-out transform hover:scale-105 focus:outline-none"
+                onClick={orderHandler}
+              >
+                Order Now
+              </button>
+            )}
           </div>
         </>
       )}
