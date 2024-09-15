@@ -1,8 +1,6 @@
 "use client";
 
-import { useState } from "react";
 import { MenuPageContent } from "./MenuPageContent";
-import { MenuPageLeftSide } from "./MenuPageLeftSide";
 
 const MenuDetails: React.FC = () => {
   return (

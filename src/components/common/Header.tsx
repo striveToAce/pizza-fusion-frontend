@@ -28,9 +28,6 @@ const Header: React.FC<HeaderProps> = ({ totalPrice, isAdmin }) => {
     router.push("/");
   }
 
-
-
-  
   return (
     <header className="bg-white shadow-md border-b border-gray-200 py-4">
       <div className="container mx-auto flex flex-col md:flex-row justify-between items-center px-4 md:px-6">
@@ -50,13 +47,17 @@ const Header: React.FC<HeaderProps> = ({ totalPrice, isAdmin }) => {
             <div className="flex items-center space-x-4">
               <div className="text-gray-700 font-semibold text-lg md:text-xl">
                 Total:{" "}
-                <span className="text-green-500">${totalPriceTillnow.toFixed(2)}</span>
+                <span className="text-green-500">
+                  ${totalPriceTillnow.toFixed(2)}
+                </span>
               </div>
-              <Link href="/my-cart">
-                <div className="bg-blue-500 text-white px-6 py-3 rounded-full shadow-lg transform transition-all hover:scale-105 hover:bg-blue-600 cursor-pointer text-sm md:text-base">
-                  Checkout
-                </div>
-              </Link>
+              {totalPriceTillnow > 0 && (
+                <Link href="/my-cart">
+                  <div className="bg-blue-500 text-white px-6 py-3 rounded-full shadow-lg transform transition-all hover:scale-105 hover:bg-blue-600 cursor-pointer text-sm md:text-base">
+                    Checkout
+                  </div>
+                </Link>
+              )}
             </div>
           </nav>
         )}

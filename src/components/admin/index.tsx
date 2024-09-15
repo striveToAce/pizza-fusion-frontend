@@ -114,6 +114,7 @@ const AdminDashboard: React.FC = () => {
             noTitle={"No pending orders"}
             list={pendingOrders}
             isLoading={loading == 0}
+            color="red"
           />
 
           {/* In Progress Orders */}
@@ -122,6 +123,7 @@ const AdminDashboard: React.FC = () => {
             noTitle={"No in-progress orders"}
             list={progressOrders}
             isLoading={loading == 1}
+            color="orange"
           />
 
           {/* Completed Orders */}
@@ -130,6 +132,7 @@ const AdminDashboard: React.FC = () => {
             noTitle={"No completed orders"}
             list={doneOrders}
             isLoading={loading == 2}
+            color="green"
           />
         </div>
       </div>

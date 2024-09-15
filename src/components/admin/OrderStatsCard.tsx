@@ -7,17 +7,19 @@ interface OrderStatsCardProps {
   title: string;
   noTitle: string;
   isLoading: boolean;
+  color:string
 }
 export const OrderStatsCard: React.FC<OrderStatsCardProps> = ({
   title,
   noTitle,
   list,
   isLoading,
+  color
 }) => {
   const router = useRouter();
   return (
     <div className="bg-white shadow-lg rounded-lg p-4 md:p-6 flex-1 cursor-pointer">
-      <h2 className="text-xl md:text-2xl font-bold mb-4 text-yellow-500">
+      <h2 className={`text-xl md:text-2xl font-bold mb-4 text-${color}-500`}>
         {title}
       </h2>
       {isLoading && <PageLoader />}
@@ -36,11 +38,11 @@ export const OrderStatsCard: React.FC<OrderStatsCardProps> = ({
                 <h3 className="text-md md:text-lg font-semibold">
                   Order #{order.id}
                 </h3>
-                <p className="text-sm text-gray-600">
+                {color!=="green" && <p className="text-sm text-gray-600">
                   Preparation Time: {order.estimatedCompletionTime}
-                </p>
+                </p>}
               </div>
-              <div className="w-full md:w-auto flex justify-center items-center px-3 py-2 md:px-4 md:py-2 bg-yellow-500 text-white rounded-full font-semibold text-sm md:text-base text-center">
+              <div className={`w-full md:w-auto flex justify-center items-center px-3 py-2 md:px-4 md:py-2 bg-${color}-500 text-white rounded-full font-semibold text-sm md:text-base text-center`}>
                 {order.status}
               </div>
             </div>
