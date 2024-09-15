@@ -14,8 +14,13 @@ export const MenuManagement: React.FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [currentItem, setCurrentItem] = useState<IMenuItem | null>(null);
 
+  /**
+   * Opens the modal with a blank item (i.e. "add" operation).
+   */
   const handleAdd = () => {
-    setCurrentItem(null); // No current item means it's an "add" operation
+    // No current item means it's an "add" operation
+    setCurrentItem(null);
+    // Open the modal
     setIsModalOpen(true);
   };
 
@@ -24,46 +29,79 @@ export const MenuManagement: React.FC = () => {
     setIsModalOpen(true);
   };
 
-  const handleDelete = async (id: string, type: "pizza" | "soda") => {
+  /**
+   * Deletes a menu item and updates the state
+   *
+   * @param {string} id - The ID of the item to delete
+   * @param {"pizza" | "soda"} type - The type of item to delete (pizza or soda)
+   * @returns {Promise<void>}
+   */
+  const handleDelete = async (id: string, type: "pizza" | "soda"): Promise<void> => {
     try {
+      // Delete the item
       await deleteMenuItemById(id);
+      // Show success message
       toast.success("Item deleted successfully");
-      getItems();
+      // Fetch items again
+      await getItems();
     } catch (err) {
+      // Show error message
       toast.error("something went wrong");
     } finally {
+      // Do nothing
     }
   };
 
-  // Fetch Pizza data
-  const getAllPizza = async () => {
+  /**
+   * Fetches all pizza items and updates the state
+   *
+   * @returns {Promise<void>}
+   */
+  const getAllPizza = async (): Promise<void> => {
     try {
+      // Show loading animation
       setIsPizzaLoading(true);
+      // Fetch pizza data
       const pizzaData = await getMenuItemsByType("pizza");
+      // Update the state with the new data
       setPizzaItems(pizzaData);
     } catch (err) {
+      // Handle errors
       console.error("Error fetching pizza items:", err);
     } finally {
+      // Hide loading animation
       setIsPizzaLoading(false);
     }
   };
 
-  // Fetch Soda data
-  const getAllSoda = async () => {
+  /**
+   * Fetches all soda items and updates the state
+   */
+  const getAllSoda = async (): Promise<void> => {
     try {
+      // Show loading animation
       setIsSodaLoading(true);
+      // Fetch soda data
       const sodaData = await getMenuItemsByType("soda");
+      // Update the state with the new data
       setSodaItems(sodaData);
     } catch (err) {
+      // Handle errors
       console.error("Error fetching soda items:", err);
     } finally {
+      // Hide loading animation
       setIsSodaLoading(false);
     }
   };
 
+  /**
+   * Fetches all menu items (pizza and soda) and updates the state
+   */
   const getItems = async () => {
     try {
+      // Fetch Pizza items
       await getAllPizza();
+      // Fetch Soda items
       await getAllSoda();
     } catch (err) {
       console.error("Error fetching items:", err);

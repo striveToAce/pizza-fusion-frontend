@@ -9,8 +9,12 @@ import { createOrderService, getEstimationTime } from "@/services/orderService";
 import { Spinner } from "../common/loader/Spinner";
 import { MyCartItemListing } from "../myCart/MyCartItemListing";
 
+/**
+ * The MyCart component displays the user's current cart contents and allows them
+ * to place an order.
+ */
 export const MyCart: React.FC = () => {
-  // Initial list of items already added to the cart
+  // Get the current cart contents from the Redux store
   const { carts } = useSelector((store: RootState) => store.view);
   const [isLoading, setIsLoading] = useState(false);
   const dispatch = useDispatch();
@@ -23,6 +27,15 @@ export const MyCart: React.FC = () => {
     0
   );
 
+  /**
+   * Handler for the "Order Now" button.
+   *
+   * 1. Estimate the prep time for the order.
+   * 2. Create an order object with the items in the cart, the total price, and
+   *    the estimated prep time.
+   * 3. Call the createOrderService function to create the order.
+   * 4. Clear the cart and redirect the user to the order success page.
+   */
   const orderHandler = async () => {
     setIsLoading(true);
     toast.loading("estimating prep time from our chef :)");

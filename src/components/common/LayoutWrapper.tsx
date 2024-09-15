@@ -18,18 +18,24 @@ interface WrapperProps {
  *
  * @param props The props for the component.
  * @param props.children The children of the component.
- * @param props.isAdmin Whether the user is an admin.
+ * @param props.isAdmin Whether the user is an admin. Defaults to false.
  * @returns The component.
  */
-const LayoutWrapper: React.FC<WrapperProps> = ({ children, isAdmin }) => {
+const LayoutWrapper: React.FC<WrapperProps> = ({
+  children,
+  isAdmin = false,
+}) => {
   return (
     <Provider store={store}>
       <div className="min-h-screen bg-gray-50 flex flex-col">
         {/* The header of the page */}
-        <Header totalPrice={0} isAdmin={isAdmin ?? false} />
+        <Header totalPrice={0} isAdmin={isAdmin} />
 
         {/* The main content area */}
-        <main className="container mx-auto p-6 flex-grow">{children}</main>
+        <main className="container mx-auto p-6 flex-grow">
+          {/* Render the children here */}
+          {children}
+        </main>
 
         {/* The toaster for notifications */}
         <Toaster />

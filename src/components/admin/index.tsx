@@ -35,28 +35,67 @@ const AdminDashboard: React.FC = () => {
     IN_PROGRESS: 1 as loadingType,
     COMPLETED: 2 as loadingType,
   };
-  const getAllOrders = async (type: orderStatus,isToLoad:boolean=true) => {
+  /**
+   * Fetch all orders of a specific status
+   *
+   * @param type - The status of the orders to fetch
+   * @param isToLoad - Whether to show a loading animation. Defaults to true.
+   */
+  const getAllOrders = async (type: orderStatus, isToLoad = true) => {
     try {
-      if(isToLoad) setLoading(loadingKeyMapping[type]);
+      // Show loading animation if isToLoad is true
+      if (isToLoad) setLoading(loadingKeyMapping[type]);
+
+      // Fetch orders from the server
       const data = await getOrdersByStatus(type);
-      if (type === "COMPLETED") setDoneOrders(data);
-      else if (type === "IN_PROGRESS") setProgressOrders(data);
-      else setPendingOrders(data);
+
+      // Update the state with the new data
+      switch (type) {
+        case "COMPLETED":
+          setDoneOrders(data);
+          break;
+        case "IN_PROGRESS":
+          setProgressOrders(data);
+          break;
+        case "PENDING":
+          setPendingOrders(data);
+          break;
+        default:
+          throw new Error(`Unknown order status: ${type}`);
+      }
     } catch (err) {
+      // Handle errors here
     } finally {
+      // Hide loading animation
       setLoading(-1);
     }
   };
 
-  const callAllOrders = async (isToLoad:boolean=true) => {
-    await getAllOrders("PENDING",isToLoad);
-    await getAllOrders("IN_PROGRESS",isToLoad);
-    await getAllOrders("COMPLETED",isToLoad);
+  /**
+   * Fetch all orders of all statuses
+   *
+   * @param isToLoad - Whether to show a loading animation. Defaults to true.
+   */
+  const callAllOrders = async (isToLoad: boolean = true) => {
+    // Fetch all orders in PENDING status
+    await getAllOrders("PENDING", isToLoad);
+    // Fetch all orders in IN_PROGRESS status
+    await getAllOrders("IN_PROGRESS", isToLoad);
+    // Fetch all orders in COMPLETED status
+    await getAllOrders("COMPLETED", isToLoad);
   };
-  const realtimeHandler = ()=>{
-    toast.success("found some updates:)")
-    callAllOrders(false)
-  }
+  /**
+   * Handle real-time updates from Supabase
+   *
+   * @remarks
+   * This function is called when Supabase detects a change in the orders table.
+   * It shows a success toast and fetches all orders again.
+   */
+  const realtimeHandler = (): void => {
+    toast.success("found some updates:)");
+    // Fetch all orders again without showing a loading animation
+    callAllOrders(false);
+  };
   // Simulate order updates (For demo purposes)
   useEffect(() => {
     callAllOrders();

@@ -4,6 +4,11 @@ import Link from "next/link";
 import { useDispatch } from "react-redux";
 import { IndividualViewCard } from "./IndividualViewCard";
 
+/**
+ * A component that displays a selection between user view and admin view.
+ * It renders two {@link IndividualViewCard} components with different links and
+ * descriptions.
+ */
 const SelectView: React.FC = () => {
   const dispatch = useDispatch();
   return (
@@ -19,10 +24,20 @@ const SelectView: React.FC = () => {
         <IndividualViewCard
           color="blue"
           label="User View"
+          /**
+           * The label description for the user view card.
+           */
           labelDesc="Browse the menu and place orders"
+          /**
+           * The function to call when the user view card is clicked.
+           * It sets the current view to "user" and navigates to the user view page.
+           */
           setCurrentView={(value) => {
             dispatch(setCurrentView(value));
           }}
+          /**
+           * The link to navigate to when the user view card is clicked.
+           */
           link={"/user-view/menu"}
         />
         {/* Admin View */}
@@ -30,10 +45,20 @@ const SelectView: React.FC = () => {
         <IndividualViewCard
           color="green"
           label="Admin View"
+          /**
+           * The label description for the admin view card.
+           */
           labelDesc="Manage orders and track progress"
+          /**
+           * The function to call when the admin view card is clicked.
+           * It sets the current view to "admin" and navigates to the admin view page.
+           */
           setCurrentView={(value) => {
             dispatch(setCurrentView(value));
           }}
+          /**
+           * The link to navigate to when the admin view card is clicked.
+           */
           link={"/select-view/admin"}
         />
       </div>
